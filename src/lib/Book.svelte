@@ -34,8 +34,8 @@
 	const random = (min, max) => Math.random() * (max - min) + min;
 
 	let rot = [-90, 0, random(80, 100)];
-	let pos = [0, height, 0];
-
+	
+	let pos = [6, height, 0];
 	let rotNormalized = rot.map((deg) => Math.PI * (deg / 180));
 
 	async function handleClick(e) {
@@ -45,8 +45,8 @@
 		toggled = !toggled;
 		tweening = true;
 
-		let args1 = [obj, 'rotation', [0, 0, 0], 1, 'sineInOut'];
-		let args = [obj, 'position', [-3, 0, 12], 1, 'sineInOut'];
+		let args1 = [obj, 'rotation', [0, -5, 0], 1, 'sineInOut'];
+		let args = [obj, 'position', [11, 9, 14.5], 1, 'sineInOut'];
 		let args3 = [obj, 'rotation', rot, 1, 'sineInOut'];
 		let args2 = [obj, 'position', pos, 1, 'sineInOut'];
 

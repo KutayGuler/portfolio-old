@@ -2,6 +2,7 @@ import * as easings from 'svelte/easing';
 
 // @ts-nocheck
 
+// the lower the number, the faster the animation
 const FPS = 60;
 
 // TODO: Alternate for rotate
@@ -47,9 +48,9 @@ export async function tween(
 		};
 
 		let multiplier = {
-			x: (init.x < 0 && init.x < vals[0]) || vals[0] > 0 ? 1 : -1,
-			y: (init.y < 0 && init.y < vals[1]) || vals[1] > 0 ? 1 : -1,
-			z: (init.z < 0 && init.z < vals[2]) || vals[2] > 0 ? 1 : -1
+			x: init.x < vals[0] ? 1 : -1,
+			y: init.y < vals[1] ? 1 : -1,
+			z: init.z < vals[2] ? 1 : -1
 		};
 
 		function animate() {
