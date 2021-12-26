@@ -2,9 +2,12 @@
 	// @ts-nocheck
 
 	import { BoxBufferGeometry, Mesh, MeshStandardMaterial, TextureLoader } from 'svelthree';
-
 	import { tween } from './tween.js';
+	import { createEventDispatcher } from 'svelte/internal';
 
+	const dispatch = createEventDispatcher();
+
+	export let index;
 	export let dir;
 	export let scene;
 	export let dimensions;
@@ -15,6 +18,11 @@
 
 	const loader = new TextureLoader();
 
+	// TODO: Add zoom
+	// TODO: Change lighting
+	// TODO: Change positioning
+
+	// let urls = ['', '', '', '', 'front.jpg', 'back.jpg'];
 	let urls = ['', '', '', '', '', ''];
 	// TODO: Make a jpg file for the side cover
 	let material = urls.map((url) => {
@@ -26,6 +34,7 @@
 	});
 
 	let geometry = new BoxBufferGeometry(...dimensions);
+	let weight = dimensions[0] * dimensions[1] * dimensions[2];
 
 	let toggled = false;
 	let tweening = false;
@@ -34,18 +43,24 @@
 	const random = (min, max) => Math.random() * (max - min) + min;
 
 	let rot = [-90, 0, random(80, 100)];
-	
+
 	let pos = [6, height, 0];
 	let rotNormalized = rot.map((deg) => Math.PI * (deg / 180));
+	let obj;
 
 	async function handleClick(e) {
 		if (tweening) return;
-		let obj = e.detail.target;
+		obj = e.detail.target;
 		if (!prev) prev = obj;
 		toggled = !toggled;
 		tweening = true;
 
-		let args1 = [obj, 'rotation', [0, -5, 0], 1, 'sineInOut'];
+		dispatch('toggle', {
+			toggled: toggled,
+			index: index
+		});
+
+		let args1 = [obj, 'rotation', [-10, 0, -6], 1, 'sineInOut'];
 		let args = [obj, 'position', [11, 9, 14.5], 1, 'sineInOut'];
 		let args3 = [obj, 'rotation', rot, 1, 'sineInOut'];
 		let args2 = [obj, 'position', pos, 1, 'sineInOut'];
@@ -60,6 +75,30 @@
 			tweening = false;
 		}
 	}
+
+	function handler(e) {
+		if (toggled && obj) {
+			obj.rotation.y += (3 / weight) * (e.deltaY > 0 ? 1 : -1);
+		}
+	}
+
+	function addEvent() {
+		window.addEventListener('wheel', handler);
+	}
+
+	function removeEvent() {
+		window.removeEventListener('wheel', handler);
+	}
 </script>
 
-<Mesh {scene} {material} {geometry} rot={rotNormalized} {pos} interact onClick={handleClick} />
+<Mesh
+	onPointerOver={addEvent}
+	onPointerLeave={removeEvent}
+	{scene}
+	{material}
+	{geometry}
+	rot={rotNormalized}
+	{pos}
+	interact
+	onClick={handleClick}
+/>
