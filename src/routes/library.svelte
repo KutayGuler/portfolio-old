@@ -1,17 +1,17 @@
 <script>
 	// @ts-ignore
+
 	import {
 		Canvas,
 		Scene,
 		PerspectiveCamera,
-		DirectionalLight,
+		PointLight,
 		AmbientLight,
 		WebGLRenderer
 	} from 'svelthree';
 
 	import Book from '$lib/Book.svelte';
 	import { books } from '$lib/books.json';
-
 	import { fade } from 'svelte/transition';
 
 	let w = innerWidth - 10;
@@ -85,8 +85,8 @@
 	<Canvas let:sti {w} {h} interactive>
 		<Scene {sti} let:scene id="scene1">
 			<PerspectiveCamera {scene} id="cam1" pos={[15, 15, 25]} lookAt={[0, 0, 0]} />
-			<AmbientLight {scene} intensity={0.75} />
-			<DirectionalLight {scene} pos={[5, 5, 5]} />
+			<AmbientLight {scene} intensity={0.5} />
+			<PointLight {scene} pos={[15, 15, 25]} intensity={0.5} castShadow />
 			{#each books as book, index}
 				<Book {...book} {scene} {index} height={index} on:toggle={toggle} />
 			{/each}

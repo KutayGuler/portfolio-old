@@ -1,5 +1,68 @@
 <script>
+	import { fade } from 'svelte/transition';
+
 	console.info = () => {};
+
+	let originals = [
+		"hello, i'm kutay, a computer science student living in wroclaw.",
+		'check out my',
+		'essays',
+		'and',
+		'library',
+		'while you are here or click the button below.'
+	];
+
+	let justLoaded = true;
+	let min = -20;
+	let max = 20;
+
+	const random = (min, max) => Math.floor(Math.random() * (max - min) + min);
+
+	let [intro, check, essays, and, library, outro] = originals;
+
+	function encrypt(index) {
+		let original = originals[index];
+		let str = Array.from(original).map((_, i) =>
+			_ == ' ' ? ' ' : String.fromCharCode(original.charCodeAt(i) + random(min, max))
+		);
+
+		return str.join('');
+	}
+
+	let phrases = [
+		'idk why I added this functionality',
+		"it's just nice to look at",
+		'so raw, so styleless',
+		'pure calculation, zero pretension'
+	];
+
+	let timer2;
+	let phraseIndex = 0;
+
+	function startTimer() {
+		justLoaded = false;
+		[min, max] = [-20, 20];
+		phraseIndex = 0;
+		monologue = phrases[phraseIndex];
+
+		let timer = setInterval(() => {
+			if (min == 0) clearInterval(timer);
+			[intro, check, essays, and, library, outro] = originals.map((_, index) => encrypt(index));
+		}, 20);
+		timer2 = setInterval(() => {
+			if (phraseIndex == 4) phraseIndex = 0;
+			monologue = phrases[phraseIndex];
+			phraseIndex++;
+		}, 3000);
+	}
+
+	function stopTimer() {
+		clearInterval(timer2);
+		monologue = '';
+		[min, max] = [0, 0];
+	}
+
+	let monologue = '';
 </script>
 
 <svelte:head>
@@ -7,20 +70,41 @@
 </svelte:head>
 
 <section>
-	<h1>hello, i'm kutay</h1>
-	<h1>a computer science student from turkey, living in wroclaw.</h1>
+	<h1>
+		{intro}<br /><br />{check}
+		<a href="/essays">{essays}</a>
+		{and}
+		<a href="/library">{library}</a>
+		{outro}
+	</h1>
+	<button on:click={min == 0 || justLoaded ? startTimer : stopTimer}
+		>{min == 0 || justLoaded ? 'gibberify' : 'stop'}</button
+	>
+	{#key monologue}
+		<h4 in:fade={{ duration: 500 }}>{monologue}</h4>
+	{/key}
 </section>
 
 <style>
+	@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300&display=swap');
+
 	section {
+		font-family: 'Roboto Mono', monospace;
 		display: flex;
 		flex-direction: column;
-		justify-content: flex-start;
+		justify-content: center;
 		align-items: center;
-		flex: 1;
+		height: 100vh;
 	}
 
 	h1 {
-		width: 100%;
+		font-size: 2rem;
+		width: 50%;
+		padding: 0;
+		margin: 0;
+	}
+
+	button {
+		margin-top: 5%;
 	}
 </style>
