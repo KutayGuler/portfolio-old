@@ -20,13 +20,7 @@
 	const paperColor = new Color('#ffffee');
 	const loader = new TextureLoader();
 
-	// TODO: Add zoom
-	// TODO: Change lighting
-	// TODO: Change positioning
-
 	let urls = ['', 'side.jpg', '', '', 'front.jpg', 'back.jpg'];
-	// let urls = ['', '', '', '', '', ''];
-	// TODO: Make a jpg file for the side cover
 	let material = urls.map((url) => {
 		return url == ''
 			? new MeshStandardMaterial({ color: paperColor })

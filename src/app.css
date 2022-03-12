@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300&display=swap');
+
 #svelte {
 	min-height: 100vh;
 	display: flex;
@@ -5,7 +7,7 @@
 }
 
 :root {
-	--accent-color: rgb(0, 161, 112);
+	--primary-color: rgb(0, 161, 112);
 }
 
 html,
@@ -17,7 +19,7 @@ body {
 }
 
 a {
-	color: var(--accent-color);
+	color: var(--primary-color);
 	text-decoration: none;
 }
 

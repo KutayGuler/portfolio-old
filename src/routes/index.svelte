@@ -86,8 +86,6 @@
 </section>
 
 <style>
-	@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300&display=swap');
-
 	section {
 		font-family: 'Roboto Mono', monospace;
 		display: flex;
@@ -104,7 +102,19 @@
 		margin: 0;
 	}
 
+	h4 {
+		text-align: center;
+		width: 50%;
+	}
+
 	button {
 		margin-top: 5%;
+	}
+
+	@media screen and (max-width: 800px) {
+		h1 {
+			font-size: 1rem;
+			width: 60%;
+		}
 	}
 </style>
