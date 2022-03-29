@@ -9,9 +9,10 @@
 
 <main>
 	<h1>essays</h1>
-	{#each essays as { href, title }}
+	<p>coming soon.</p>
+	<!-- {#each essays as { href, title }}
 		<a href="essays/{href}">{title}</a>
-	{/each}
+	{/each} -->
 </main>
 
 <style>
