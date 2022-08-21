@@ -1,16 +1,13 @@
-<script>
-	// @ts-nocheck
+<script lang="ts">
+	import { TextureLoader, MeshStandardMaterial, BoxBufferGeometry, Color } from 'three';
+	import { Mesh } from '@threlte/core';
+	import { tween } from './tween';
 
-	import { BoxBufferGeometry, Mesh, MeshStandardMaterial, TextureLoader } from 'svelthree';
-	import { tween } from './tween.js';
 	import { createEventDispatcher } from 'svelte/internal';
-	import { Color } from 'svelthree-three';
-
 	const dispatch = createEventDispatcher();
 
 	export let index;
 	export let dir;
-	export let scene;
 	export let dimensions;
 	export let height;
 	export const unselect = () => {
@@ -38,15 +35,23 @@
 
 	const random = (min, max) => Math.random() * (max - min) + min;
 
-	let rot = [-90, 0, random(80, 100)];
+	let rotation = {
+		x: Math.PI * (-90 / 180),
+		y: 0,
+		z: Math.PI * (random(80, 100) / 180)
+	};
 
-	let pos = [6, height, 0];
-	let rotNormalized = rot.map((deg) => Math.PI * (deg / 180));
+	let position = {
+		x: 6,
+		y: height,
+		z: 0
+	};
+
 	let obj;
 
 	async function handleClick(e) {
 		if (tweening) return;
-		obj = e.detail.target;
+		obj = e.detail.object;
 		if (!prev) prev = obj;
 		toggled = !toggled;
 		tweening = true;
@@ -58,8 +63,8 @@
 
 		let args1 = [obj, 'rotation', [-10, 0, -6], 1, 'sineInOut'];
 		let args = [obj, 'position', [11, 9, 14.5], 1, 'sineInOut'];
-		let args3 = [obj, 'rotation', rot, 1, 'sineInOut'];
-		let args2 = [obj, 'position', pos, 1, 'sineInOut'];
+		let args3 = [obj, 'rotation', rotation, 1, 'sineInOut'];
+		let args2 = [obj, 'position', position, 1, 'sineInOut'];
 
 		if (toggled) {
 			tween(...args);
@@ -88,13 +93,13 @@
 </script>
 
 <Mesh
-	onPointerOver={addEvent}
-	onPointerLeave={removeEvent}
-	{scene}
+	on:pointerenter={addEvent}
+	on:pointerleave={removeEvent}
+	on:click={handleClick}
+	interactive
+	castShadow
+	{position}
+	{rotation}
 	{material}
 	{geometry}
-	rot={rotNormalized}
-	{pos}
-	interact
-	onClick={handleClick}
 />

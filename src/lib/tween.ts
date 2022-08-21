@@ -1,38 +1,36 @@
 import * as easings from 'svelte/easing';
 
-// @ts-nocheck
-
 // the lower the number, the faster the animation
 const FPS = 60;
 
-// TODO: Alternate for rotate
-
 /**
- * @param {Object} obj svelthree component
- * @param {String} attrName "position" || "rotation" || "scale"
+ * @param {String} attrName
  * @param {Array} vals [x, y, z] values of the obj[prop] at the end of the animation
  * @param {Number} duration time in seconds
  * @param {String} easing (optional) (default: "linear") easing function name
  * @param {Object} repeatObj (optional) (default: { count: 0, alternate: true })
  */
 export async function tween(
-	obj,
-	attrName,
-	vals,
-	duration,
+	obj: Object,
+	attrName: 'position' | 'rotation' | 'scale',
+	vals: { x: number; y: number; z: number },
+	duration: number,
 	easing = 'linear',
 	repeatObj = {
 		count: 0,
 		alternate: true
 	}
 ) {
+	console.log(obj);
 	const res = await new Promise((resolve) => {
 		let rAF = 0;
 		let f = 0; // a single frame
 		let total = FPS * duration;
 
 		if (attrName == 'rotation') {
-			vals = vals.map((val) => Math.PI * (val / 180));
+			vals.x = Math.PI * (vals.x / 180);
+			vals.y = Math.PI * (vals.y / 180);
+			vals.z = Math.PI * (vals.z / 180);
 		}
 
 		let init = {
@@ -42,15 +40,15 @@ export async function tween(
 		};
 
 		let delta = {
-			x: Math.abs(init.x - vals[0]),
-			y: Math.abs(init.y - vals[1]),
-			z: Math.abs(init.z - vals[2])
+			x: Math.abs(init.x - vals.x),
+			y: Math.abs(init.y - vals.y),
+			z: Math.abs(init.z - vals.z)
 		};
 
 		let multiplier = {
-			x: init.x < vals[0] ? 1 : -1,
-			y: init.y < vals[1] ? 1 : -1,
-			z: init.z < vals[2] ? 1 : -1
+			x: init.x < vals.x ? 1 : -1,
+			y: init.y < vals.y ? 1 : -1,
+			z: init.z < vals.z ? 1 : -1
 		};
 
 		function animate() {

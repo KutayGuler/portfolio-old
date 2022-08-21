@@ -6,8 +6,6 @@
 	let originals = [
 		"hello, i'm kutay, a computer science student living in wroclaw.",
 		'check out my',
-		'essays',
-		'and',
 		'library',
 		'while you are here or click the button below.'
 	];
@@ -18,7 +16,7 @@
 
 	const random = (min, max) => Math.floor(Math.random() * (max - min) + min);
 
-	let [intro, check, essays, and, library, outro] = originals;
+	let [intro, check, library, outro] = originals;
 
 	function encrypt(index) {
 		let original = originals[index];
@@ -47,7 +45,7 @@
 
 		let timer = setInterval(() => {
 			if (min == 0) clearInterval(timer);
-			[intro, check, essays, and, library, outro] = originals.map((_, index) => encrypt(index));
+			[intro, check, library, outro] = originals.map((_, index) => encrypt(index));
 		}, 20);
 		timer2 = setInterval(() => {
 			if (phraseIndex == 4) phraseIndex = 0;
@@ -72,8 +70,6 @@
 <section>
 	<h1>
 		{intro}<br /><br />{check}
-		<a href="/essays">{essays}</a>
-		{and}
 		<a href="/library">{library}</a>
 		{outro}
 	</h1>
